@@ -1,0 +1,15 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HBS</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    {{>header}}
+    <h2>This is your weather of {{city}}</h2>
+    <p>Temp : {{report.temperature}}</p>
+    <p>windspeed : {{report.windspeed}}</p>
+    {{>footer}}
+  </body>
+</html>

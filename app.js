@@ -2,6 +2,8 @@ const fs = require("fs");
 const express = require("express");
 const path = require("path");
 const hbs = require("hbs");
+const geoCode = require("./scripts/geocode.js");
+const weatherData = require("./scripts/weatherfetc.js");
 
 const app = express();
 
@@ -28,8 +30,37 @@ app.get("/about", (req, res) => {
   });
 });
 
+app.get("/weather", (req, res) => {
+  let city = req.query.city;
+  console.log(city);
+
+  geoCode(city, (resp, data) => {
+    if (!data) {
+      console.log(resp);
+      res.render("404.hbs", {
+        header: resp,
+        name: "Ranjith",
+      });
+    } else {
+      weatherData(data.long, data.lat, (message, result) => {
+        if (!result) {
+          console.log(message);
+        } else {
+          console.log(message, result);
+          res.render("weather.hbs", {
+            header: "Weather Report",
+            city: city.slice(0, 1).toUpperCase() + city.slice(1),
+            name: "Ranjith",
+            report: result,
+          });
+        }
+      });
+    }
+  });
+});
+
 app.get("*", (req, res) => {
-  res.render("about.hbs", {
+  res.render("404.hbs", {
     header: "404 : Page Not Found",
     name: "Ranjith",
   });
