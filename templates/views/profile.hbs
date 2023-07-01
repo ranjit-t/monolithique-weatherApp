@@ -7,7 +7,11 @@
   </head>
   <body>
     {{>header}}
-    <p>This is your weather of {{city}}</p>
-    {{>footer}}
+    <img src="/img/avatar.jpg" alt="profile" >
+<form action="/avatarupload" method="post" enctype="multipart/form-data">
+    <input type="file" placeholder="Avatar" name="avatar" required>
+    <button type="submit">Upload</button>
+</form>    
+{{>footer}}
   </body>
 </html>

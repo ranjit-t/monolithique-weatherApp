@@ -29,6 +29,12 @@ app.get("/about", (req, res) => {
     name: "Ranjith",
   });
 });
+app.get("/profile", (req, res) => {
+  res.render("profile.hbs", {
+    header: "My Profile",
+    name: "Ranjith",
+  });
+});
 
 app.get("/weather", (req, res) => {
   let city = req.query.city;
@@ -58,6 +64,41 @@ app.get("/weather", (req, res) => {
     }
   });
 });
+
+const multer = require("multer");
+
+const avatar = multer({
+  // dest: "avatars",
+
+  // to have custom names
+  storage: multer.diskStorage({
+    destination: "./public/img",
+    filename: function (req, file, cb) {
+      cb(null, "avatar.jpg");
+    },
+  }),
+  limits: {
+    fileSize: 1024 * 1024,
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)/)) {
+      return cb(new Error("please upload image files ending with .jpg"));
+    }
+    cb(undefined, true);
+  },
+});
+
+app.post(
+  "/avatarupload",
+  avatar.single("avatar"),
+  (req, res) => {
+    // res.send({ message: "image uploaded successfully" });
+    res.redirect("/profile");
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
 
 app.get("*", (req, res) => {
   res.render("404.hbs", {
